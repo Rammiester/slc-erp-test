@@ -45,6 +45,10 @@
                                 @break
                             @endif
                         @endforeach
+                        <div class="mb-3">
+                            <button id="sortByFirstNameBtn" class="btn btn-primary"><i class="bi bi-sort-alpha-down"></i> Sort by First Name</button>
+                        </div>
+
                         <div class="bg-white border shadow-sm p-3 mt-4">
                             <table class="table table-responsive">
                                 <thead>
@@ -116,4 +120,47 @@
         });
     }
 </script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Event listener for the "Sort by First Name" button
+        document.getElementById('sortByFirstNameBtn').addEventListener('click', function() {
+            console.log("Button clicked!"); // Debugging statement
+            sortStudentsByFirstName();
+        });
+    });
+
+    function sortStudentsByFirstName() {
+        console.log("Sorting students by first name..."); // Debugging statement
+
+        // Get the student table body
+        var tbody = document.querySelector('tbody');
+
+        console.log(tbody); // Debugging statement
+
+        // Get all rows from the table body
+        var rows = Array.from(tbody.querySelectorAll('tr'));
+
+        console.log(rows); // Debugging statement
+
+        // Sort the rows by first name
+        rows.sort(function(a, b) {
+            var nameA = a.cells[2].textContent.trim().toLowerCase(); // Assuming first name is in the third cell
+            var nameB = b.cells[2].textContent.trim().toLowerCase();
+            return nameA.localeCompare(nameB);
+        });
+
+        console.log(rows); // Debugging statement
+
+        // Re-append sorted rows to the table body
+        rows.forEach(function(row) {
+            tbody.appendChild(row);
+        });
+
+        console.log("Sorting complete!"); // Debugging statement
+    }
+</script>
+
+
+
+
 @endsection

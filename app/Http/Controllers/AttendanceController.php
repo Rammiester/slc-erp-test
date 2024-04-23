@@ -71,10 +71,15 @@ class AttendanceController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create(Request $request)
-    {
+    {   
         if($request->query('class_id') == null){
             return abort(404);
         }
+        // date_default_timezone_set('Asia/Kolkata');
+        
+        // $timestamp = time();
+        // $date_time = date("d-m-Y (D) H:i:s", $timestamp);
+        // echo "Current date and local time on this server is $date_time";
         try{
             $academic_setting = $this->academicSettingRepository->getAcademicSetting();
             $current_school_session_id = $this->getSchoolCurrentSession();

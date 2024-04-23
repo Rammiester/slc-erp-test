@@ -1,10 +1,13 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center mt-4">
-        <div class="col-md-6">
-            <div class="card">
+<div class="container ">
+    <div class="row justify-content-between mt-4">
+        <div class="col align-content-center  px-5 mx-5" >
+            <img src="/imgs/Logo_main-cropped.svg" height="275"  alt="" class="mx-5 px-5 pt-5">
+        </div>
+        <div class="col-md-6 pt-5">
+            <div class="card mt-5">
                 <div class="card-header bg-white">{{ __('Login') }}</div>
 
                 <div class="card-body">

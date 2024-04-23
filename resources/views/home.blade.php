@@ -97,7 +97,7 @@
                             <div class="card mb-3">
                                 <div class="card-header bg-transparent"><i class="bi bi-calendar-event me-2"></i> Events</div>
                                 <div class="card-body text-dark">
-                                    @include('components.events.event-calendar', ['editable' => 'false', 'selectable' => 'false'])
+                                    @include('components.events.event-calendar', ['editable' => 'false', 'selectable' => 'true'])
                                     {{-- <div class="overflow-auto" style="height: 250px;">
                                         <div class="list-group">
                                             <a href="#" class="list-group-item list-group-item-action">

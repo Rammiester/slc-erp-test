@@ -21,7 +21,11 @@
                             Section #{{request()->query('section_name')}}
                         @endif
                     </h3>
-                    <div class="mt-4">Current Date and Time: {{ date('Y-m-d H:i:s') }}</div>
+                    <div class="mt-4">
+                        <label for="attendance_datetime">Enter Date and Time:</label>
+                        <input type="datetime-local" id="attendance_datetime" name="attendance_datetime">
+                    </div>
+
                     <div class="row mt-4">
                         <div class="col-10 bg-white border p-3 shadow-sm">
                             <form action="{{route('attendances.store')}}" method="POST">
@@ -56,7 +60,8 @@
                                         @endforeach
                                     </tbody>
                                 </table>
-                                @if(count($student_list) > 0 && $attendance_count < 1)
+                                @if(count($student_list) > 0 ) 
+                                <!-- && $attendance_count < 1 -->
                                 <div class="mb-4">
                                     <button type="submit" class="btn btn-outline-primary"><i class="bi bi-check2"></i> Submit</button>
                                 </div>

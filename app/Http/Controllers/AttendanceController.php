@@ -14,7 +14,7 @@ use App\Interfaces\SectionInterface;
 use App\Repositories\AttendanceRepository;
 use App\Repositories\CourseRepository;
 use App\Traits\SchoolSession;
-
+use Carbon\Carbon;
 class AttendanceController extends Controller
 {
     use SchoolSession;
@@ -125,14 +125,37 @@ class AttendanceController extends Controller
     public function store(AttendanceStoreRequest $request)
     {
         try {
-            $attendanceRepository = new AttendanceRepository();
-            $attendanceRepository->saveAttendance($request->validated());
-
-            return back()->with('status', 'Attendance save was successful!');
+            // Retrieve datetime value from the request
+            $attendanceDateTime = $request->input('attendance_datetime');
+    
+            // Iterate over each student's attendance status
+            foreach ($request->input('status') as $studentId => $status) {
+                // Create a new Attendance instance
+                $attendance = new Attendance();
+    
+                // Populate attendance data
+                $attendance->session_id = $request->input('session_id');
+                $attendance->class_id = $request->input('class_id');
+                $attendance->course_id = $request->input('course_id');
+                $attendance->section_id = $request->input('section_id');
+                $attendance->student_id = $studentId;
+                $attendance->status = $status;
+                // $attendance->attendance = $request->input('attendance_datetime');
+                
+                // Store the datetime value from the form
+                $attendance->attendance_Date_Time = $attendanceDateTime;
+                // dd($request->all());
+                // Save the attendance data
+                $attendance->save();
+            }
+    
+            return back()->with('status', 'Attendance saved successfully!');
         } catch (\Exception $e) {
             return back()->withError($e->getMessage());
         }
     }
+    
+    
 
     /**
      * Display the specified resource.

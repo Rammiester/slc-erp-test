@@ -21,24 +21,30 @@
                             Section #{{request()->query('section_name')}}
                         @endif
                     </h3>
-                    <div class="mt-4">
-                        <label for="attendance_datetime">Enter Date and Time:</label>
-                        <input type="datetime-local" id="attendance_datetime" name="attendance_datetime">
-                    </div>
+                    
 
                     <div class="row mt-4">
                         <div class="col-10 bg-white border p-3 shadow-sm">
                             <form action="{{route('attendances.store')}}" method="POST">
+                            <div class="mt-4">
+                                <label for="attendance_datetime">Enter Date and Time:</label>
+                                <input type="datetime-local" id="attendance_datetime" name="attendance_datetime"  value="{{request()->query('attendance_datetime')}}">
+                            </div>
                                 @csrf
                                 <input type="hidden" name="session_id" value="{{$current_school_session_id}}">
                                 <input type="hidden" name="class_id" value="{{request()->query('class_id')}}">
                                 @if ($academic_setting->attendance_type == 'course')
                                     <input type="hidden" name="course_id" value="{{request()->query('course_id')}}">
                                     <input type="hidden" name="section_id" value="0">
+                                    
                                 @else
                                     <input type="hidden" name="course_id" value="0">
                                     <input type="hidden" name="section_id" value="{{request()->query('section_id')}}">
                                 @endif
+                                @foreach ($student_list as $student)
+                                    <input type="hidden" name="student_ids[]" value="{{ $student->student_id }}">
+                                    <!-- Other form fields for each student -->
+                                @endforeach
                                 <table class="table">
                                     <thead>
                                         <tr>

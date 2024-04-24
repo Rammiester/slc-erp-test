@@ -25,6 +25,7 @@ class Attendance extends Model
         'session_id',
         'course_id',
         'status',
+        'attendance_Date_Time', // Add the new column here
     ];
 
     /**

@@ -3,18 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\Attendance;
-use Illuminate\Http\Request;
-use App\Interfaces\UserInterface;
+use App\Http\Requests\AttendanceStoreRequest;
+use App\Interfaces\AcademicSettingInterface;
 use App\Interfaces\SchoolClassInterface;
 use App\Interfaces\SchoolSessionInterface;
-use App\Interfaces\AcademicSettingInterface;
-use App\Http\Requests\AttendanceStoreRequest;
 use App\Interfaces\SectionInterface;
+use App\Interfaces\UserInterface;
+use App\Models\Attendance;
 use App\Repositories\AttendanceRepository;
-use App\Repositories\CourseRepository;
 use App\Traits\SchoolSession;
-use Carbon\Carbon;
+use Illuminate\Http\Request;
+use App\Models\Routine;
 class AttendanceController extends Controller
 {
     use SchoolSession;
@@ -66,21 +65,17 @@ class AttendanceController extends Controller
 
     /**
      * Show the form for creating a new resource.
-     * 
+     *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function create(Request $request)
-    {   
-        if($request->query('class_id') == null){
+    {
+        if ($request->query('class_id') == null) {
             return abort(404);
         }
-        // date_default_timezone_set('Asia/Kolkata');
-        
-        // $timestamp = time();
-        // $date_time = date("d-m-Y (D) H:i:s", $timestamp);
-        // echo "Current date and local time on this server is $date_time";
-        try{
+
+        try {
             $academic_setting = $this->academicSettingRepository->getAcademicSetting();
             $current_school_session_id = $this->getSchoolCurrentSession();
 
@@ -95,19 +90,38 @@ class AttendanceController extends Controller
 
             $attendanceRepository = new AttendanceRepository();
 
-            if($academic_setting->attendance_type == 'section') {
+            if ($academic_setting->attendance_type == 'section') {
                 $attendance_count = $attendanceRepository->getSectionAttendance($class_id, $section_id, $current_school_session_id)->count();
             } else {
                 $attendance_count = $attendanceRepository->getCourseAttendance($class_id, $course_id, $current_school_session_id)->count();
             }
 
+            // Fetch routines for the selected date
+            $routines = Routine::whereDate('start', now()->toDateString())->get();
+            
+            // Initialize an empty array to store available classes
+            $availableClasses = [];
+
+            // Iterate over the fetched routines to extract class information
+            foreach ($routines as $routine) {
+                // Assuming each routine has a class_id attribute
+                $classId = $routine->class_id;
+
+                // Check if the class ID is not already in the available classes array
+                if (!in_array($classId, $availableClasses)) {
+                    // Add the class ID to the available classes array
+                    $availableClasses[] = $classId;
+                }
+            }
+
             $data = [
                 'current_school_session_id' => $current_school_session_id,
-                'academic_setting'  => $academic_setting,
-                'student_list'      => $student_list,
-                'school_class'      => $school_class,
-                'school_section'    => $school_section,
-                'attendance_count'  => $attendance_count,
+                'academic_setting' => $academic_setting,
+                'student_list' => $student_list,
+                'school_class' => $school_class,
+                'school_section' => $school_section,
+                'attendance_count' => $attendance_count,
+                'availableClasses' => $availableClasses, // Pass the available classes to the view
             ];
 
             return view('attendances.take', $data);
@@ -115,6 +129,54 @@ class AttendanceController extends Controller
             return back()->withError($e->getMessage());
         }
     }
+
+    
+    public function returnRoutine(Request $request)
+    {
+        try {
+            // Retrieve the selected date from the request
+            $selectedDate = $request->input('attendance_datetime');
+            
+            // Convert the selected date to the day of the week (1 for Sunday, 2 for Monday, and so on)
+            $dayOfWeek = date('N', strtotime($selectedDate));
+
+            // Retrieve the start time from the request (assuming it's in HH:MM AM/PM format)
+            $startTime = date('h:i A', strtotime($selectedDate));
+
+            // Fetch routine data based on the day of the week and start time
+            $routines = Routine::where('weekday', $dayOfWeek)
+                                ->where('start', $startTime)
+                                ->get();
+            
+            // Initialize an empty array to store available classes
+            $availableClasses = [];
+
+            // Iterate over the fetched routines to extract class information
+            foreach ($routines as $routine) {
+                // Assuming each routine has a class_id attribute
+                $classId = $routine->class_id;
+
+                // Check if the class ID is not already in the available classes array
+                if (!in_array($classId, $availableClasses)) {
+                    // Add the class ID to the available classes array
+                    $availableClasses[] = $classId;
+                }
+            }
+            \Log::info('Selected Date: ' . $selectedDate);
+            \Log::info('Day of Week: ' . $dayOfWeek);
+            \Log::info('Start Time: ' . $startTime);
+            \Log::info('Fetched Routines: ' . json_encode($routines));
+
+
+            // Return the list of available classes in JSON format
+            return response()->json($availableClasses);
+        } catch (\Exception $e) {
+            // Handle any exceptions and return an error response
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
+    
 
     /**
      * Store a newly created resource in storage.
@@ -127,12 +189,12 @@ class AttendanceController extends Controller
         try {
             // Retrieve datetime value from the request
             $attendanceDateTime = $request->input('attendance_datetime');
-    
+
             // Iterate over each student's attendance status
             foreach ($request->input('status') as $studentId => $status) {
                 // Create a new Attendance instance
                 $attendance = new Attendance();
-    
+
                 // Populate attendance data
                 $attendance->session_id = $request->input('session_id');
                 $attendance->class_id = $request->input('class_id');
@@ -141,21 +203,19 @@ class AttendanceController extends Controller
                 $attendance->student_id = $studentId;
                 $attendance->status = $status;
                 // $attendance->attendance = $request->input('attendance_datetime');
-                
+
                 // Store the datetime value from the form
                 $attendance->attendance_Date_Time = $attendanceDateTime;
                 // dd($request->all());
                 // Save the attendance data
                 $attendance->save();
             }
-    
+
             return back()->with('status', 'Attendance saved successfully!');
         } catch (\Exception $e) {
             return back()->withError($e->getMessage());
         }
     }
-    
-    
 
     /**
      * Display the specified resource.
@@ -165,7 +225,7 @@ class AttendanceController extends Controller
      */
     public function show(Request $request)
     {
-        if($request->query('class_id') == null){
+        if ($request->query('class_id') == null) {
             return abort(404);
         }
 
@@ -179,21 +239,22 @@ class AttendanceController extends Controller
 
         try {
             $academic_setting = $this->academicSettingRepository->getAcademicSetting();
-            if($academic_setting->attendance_type == 'section') {
+            if ($academic_setting->attendance_type == 'section') {
                 $attendances = $attendanceRepository->getSectionAttendance($class_id, $section_id, $current_school_session_id);
             } else {
                 $attendances = $attendanceRepository->getCourseAttendance($class_id, $course_id, $current_school_session_id);
             }
             $data = ['attendances' => $attendances];
-            
+
             return view('attendances.view', $data);
         } catch (\Exception $e) {
             return back()->withError($e->getMessage());
         }
     }
 
-    public function showStudentAttendance($id) {
-        if(auth()->user()->role == "student" && auth()->user()->id != $id) {
+    public function showStudentAttendance($id)
+    {
+        if (auth()->user()->role == "student" && auth()->user()->id != $id) {
             return abort(404);
         }
         $current_school_session_id = $this->getSchoolCurrentSession();
@@ -203,8 +264,8 @@ class AttendanceController extends Controller
         $student = $this->userRepository->findStudent($id);
 
         $data = [
-            'attendances'   => $attendances,
-            'student'       => $student,
+            'attendances' => $attendances,
+            'student' => $student,
         ];
 
         return view('attendances.attendance', $data);

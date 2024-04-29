@@ -1,6 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
+<script>
+    function dateSubmit () {
+        console.log("I'm running ");
+    }
+</script>
 <div class="container">
     <div class="row justify-content-start">
         @include('layouts.left-menu')
@@ -14,36 +19,50 @@
                     @include('session-messages')
 
                     <h3><i class="bi bi-compass"></i>
-                        Class #{{request()->query('class_name')}}, 
+                        Class #{{ request()->query('class_name') }}, 
                         @if ($academic_setting->attendance_type == 'course')
-                            Course: {{request()->query('course_name')}}
+                            Course: {{ request()->query('course_name') }}
                         @else
-                            Section #{{request()->query('section_name')}}
+                            Section #{{ request()->query('section_name') }}
                         @endif
                     </h3>
-                    
 
                     <div class="row mt-4">
                         <div class="col-10 bg-white border p-3 shadow-sm">
-                            <form action="{{route('attendances.store')}}" method="POST">
-                            <div class="mt-4">
-                                <label for="attendance_datetime">Enter Date and Time:</label>
-                                <input type="datetime-local" id="attendance_datetime" name="attendance_datetime"  value="{{request()->query('attendance_datetime')}}">
-                            </div>
+                            <form action="{{ route('attendances.returnRoutine') }}" method="GET" id='formId'>
                                 @csrf
-                                <input type="hidden" name="session_id" value="{{$current_school_session_id}}">
-                                <input type="hidden" name="class_id" value="{{request()->query('class_id')}}">
+                                <div class="mt-4">
+                                    <label for="attendance_datetime">Enter Date:</label>
+                                    <input type="date" id="attendance_datetime" name="attendance_datetime" value="{{ request()->query('attendance_datetime') }}" >
+                                    <button type="submit">Submit</button>
+                                </div>
+                            </form>
+
+                            <!-- Dropdown menu for selecting classes -->
+                            <div class="mt-4">
+                                <label for="class_id">Select Class:</label>
+                                <select class="form-control" id="class_id" name="class_id">
+                                    <option value="">Select Class</option>
+                                    @foreach ($availableClasses as $classId)
+                                        <option value="{{ $classId }}">{{ $classId }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <!-- Form for taking attendance -->
+                            <form action="{{ route('attendances.store') }}" method="POST">
+                                @csrf
+                                <input type="hidden" name="session_id" value="{{ $current_school_session_id }}">
+                                <input type="hidden" name="class_id" value="{{ request()->query('class_id') }}">
                                 @if ($academic_setting->attendance_type == 'course')
-                                    <input type="hidden" name="course_id" value="{{request()->query('course_id')}}">
+                                    <input type="hidden" name="course_id" value="{{ request()->query('course_id') }}">
                                     <input type="hidden" name="section_id" value="0">
-                                    
                                 @else
                                     <input type="hidden" name="course_id" value="0">
-                                    <input type="hidden" name="section_id" value="{{request()->query('section_id')}}">
+                                    <input type="hidden" name="section_id" value="{{ request()->query('section_id') }}">
                                 @endif
                                 @foreach ($student_list as $student)
                                     <input type="hidden" name="student_ids[]" value="{{ $student->student_id }}">
-                                    <!-- Other form fields for each student -->
                                 @endforeach
                                 <table class="table">
                                     <thead>
@@ -55,22 +74,20 @@
                                     </thead>
                                     <tbody>
                                         @foreach ($student_list as $student)
-                                        <input type="hidden" name="student_ids[]" value="{{$student->student_id}}">
-                                        <tr>
-                                            <th scope="row">{{$student->id_card_number}}</th>
-                                            <td>{{$student->student->first_name}} {{$student->student->last_name}}</td>
-                                            <td>
-                                                <input class="form-check-input" type="checkbox" name="status[{{$student->student_id}}]" checked>
-                                            </td>
-                                        </tr>
+                                            <tr>
+                                                <th scope="row">{{ $student->id_card_number }}</th>
+                                                <td>{{ $student->student->first_name }} {{ $student->student->last_name }}</td>
+                                                <td>
+                                                    <input class="form-check-input" type="checkbox" name="status[{{ $student->student_id }}]" checked>
+                                                </td>
+                                            </tr>
                                         @endforeach
                                     </tbody>
                                 </table>
-                                @if(count($student_list) > 0 ) 
-                                <!-- && $attendance_count < 1 -->
-                                <div class="mb-4">
-                                    <button type="submit" class="btn btn-outline-primary"><i class="bi bi-check2"></i> Submit</button>
-                                </div>
+                                @if (count($student_list) > 0)
+                                    <div class="mb-4">
+                                        <button type="submit" class="btn btn-outline-primary"><i class="bi bi-check2"></i> Submit</button>
+                                    </div>
                                 @endif
                             </form>
                         </div>
@@ -81,4 +98,5 @@
         </div>
     </div>
 </div>
+
 @endsection

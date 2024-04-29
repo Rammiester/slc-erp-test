@@ -83,7 +83,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/attendances/view', [AttendanceController::class, 'show'])->name('attendance.list.show');
     Route::get('/attendances/take', [AttendanceController::class, 'create'])->name('attendance.create.show');
     Route::post('/attendances', [AttendanceController::class, 'store'])->name('attendances.store');
-
+    Route::get('/attendances', [AttendanceController::class, 'returnRoutine'])->name('attendances.returnRoutine');
+    
     // Classes and sections
     Route::get('/classes', [SchoolClassController::class, 'index']);
     Route::get('/class/edit/{id}', [SchoolClassController::class, 'edit'])->name('class.edit');

@@ -28,6 +28,7 @@ class AttendanceRepository implements AttendanceInterface {
                 'section_id'    => $request['section_id'],
                 'course_id'     => $request['course_id'],
                 'session_id'    => $request['session_id'],
+                
                 'created_at'    => $now,
                 'updated_at'    => $now,
             );

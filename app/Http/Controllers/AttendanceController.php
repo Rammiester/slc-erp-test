@@ -136,45 +136,63 @@ class AttendanceController extends Controller
         try {
             // Retrieve the selected date from the request
             $selectedDate = $request->input('attendance_datetime');
-            
+            $selectedSession = $request->input('session_id');
+            $selectedClass = $request->input('class_id');
+            $selectedSection = $request->input('section_id');
             // Convert the selected date to the day of the week (1 for Sunday, 2 for Monday, and so on)
             $dayOfWeek = date('N', strtotime($selectedDate));
-
-            // Retrieve the start time from the request (assuming it's in HH:MM AM/PM format)
-            $startTime = date('h:i A', strtotime($selectedDate));
-
+            
             // Fetch routine data based on the day of the week and start time
             $routines = Routine::where('weekday', $dayOfWeek)
-                                ->where('start', $startTime)
+                                ->where('section_id',$selectedSection )
                                 ->get();
-            
-            // Initialize an empty array to store available classes
+            \Log::info('Fetched Routines: ' . json_encode($routines));
+            if ($routines === null){
+                \Log::info("Not class Available for selected Day of Week");
+                // return response()->json(["No Classes Available"]);
+                return back()->withInput()->withErrors(['No Classes Available' => 'No Classes Available']);
+
+
+            }
+            else{
+                // Initialize an empty array to store available classes
             $availableClasses = [];
 
             // Iterate over the fetched routines to extract class information
             foreach ($routines as $routine) {
-                // Assuming each routine has a class_id attribute
-                $classId = $routine->class_id;
-
-                // Check if the class ID is not already in the available classes array
-                if (!in_array($classId, $availableClasses)) {
-                    // Add the class ID to the available classes array
-                    $availableClasses[] = $classId;
-                }
+                
+                $startTime  = $routine->start;
+                $endTime = $routine->end;
+                $timeRange = $startTime . ' - ' . $endTime;
+                $availableClasses[] = $timeRange; 
             }
-            \Log::info('Selected Date: ' . $selectedDate);
-            \Log::info('Day of Week: ' . $dayOfWeek);
-            \Log::info('Start Time: ' . $startTime);
-            \Log::info('Fetched Routines: ' . json_encode($routines));
+            
+            // Fetch academic setting data
+            $academic_setting = $this->academicSettingRepository->getAcademicSetting();
 
+            // Fetch current school session id
+            $current_school_session_id = $this->getSchoolCurrentSession();
 
+            // Fetch student list
+            $student_list = $this->userRepository->getAllStudents($current_school_session_id, $selectedClass, $selectedSection);
+
+            \Log::info('Fetched available Classes: ' . json_encode($availableClasses));
+            
             // Return the list of available classes in JSON format
-            return response()->json($availableClasses);
+            return view('attendances.take')->with([
+                'availableClasses' => $availableClasses,
+                'academic_setting' => $academic_setting,
+                'current_school_session_id' => $current_school_session_id,
+                'student_list' => $student_list,
+            ]);
+        }
+            
         } catch (\Exception $e) {
             // Handle any exceptions and return an error response
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+
 
     
 
@@ -187,35 +205,46 @@ class AttendanceController extends Controller
     public function store(AttendanceStoreRequest $request)
     {
         try {
+            
             // Retrieve datetime value from the request
-            $attendanceDateTime = $request->input('attendance_datetime');
+            $attendanceDate = $request->input('attendance_date');
+            $class = $request->input('class');
+            \Log::info('Fetched Time ' . json_encode($class));
+            \Log::info('Fetched Date ' . json_encode($attendanceDate));
 
-            // Iterate over each student's attendance status
-            foreach ($request->input('status') as $studentId => $status) {
-                // Create a new Attendance instance
-                $attendance = new Attendance();
+            
+            // Ensure the attendance_Date_Time value is not null
+            if ($attendanceDate && $class) {
+                // Iterate over each student's attendance status
+                foreach ($request->input('status') as $studentId => $status) {
+                    // Create a new Attendance instance
+                    $attendance = new Attendance();
+                    
+                    // Populate attendance data
+                    $attendance->session_id = $request->input('session_id');
+                    $attendance->class_id = $request->input('class_id');
+                    $attendance->course_id = $request->input('course_id');
+                    $attendance->section_id = $request->input('section_id');
+                    $attendance->student_id = $studentId;
+                    $attendance->status = $status;
+                    
+                    // Concatenate attendance_date and class
+                    $attendance->attendance_Date_Time = $attendanceDate . ' ' . $class;
+                    
+                    // Save the attendance data
+                    $attendance->save();
+                }
 
-                // Populate attendance data
-                $attendance->session_id = $request->input('session_id');
-                $attendance->class_id = $request->input('class_id');
-                $attendance->course_id = $request->input('course_id');
-                $attendance->section_id = $request->input('section_id');
-                $attendance->student_id = $studentId;
-                $attendance->status = $status;
-                // $attendance->attendance = $request->input('attendance_datetime');
-
-                // Store the datetime value from the form
-                $attendance->attendance_Date_Time = $attendanceDateTime;
-                // dd($request->all());
-                // Save the attendance data
-                $attendance->save();
+                return back()->with('status', 'Attendance saved successfully!');
+            } else {
+                // Handle the case where attendance_Date_Time or class is null
+                return back()->withInput()->withErrors(['attendance_datetime' => 'Attendance Date Time and Class are required']);
             }
-
-            return back()->with('status', 'Attendance saved successfully!');
         } catch (\Exception $e) {
             return back()->withError($e->getMessage());
         }
     }
+
 
     /**
      * Display the specified resource.

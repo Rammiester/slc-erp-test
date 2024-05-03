@@ -1,11 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<script>
-    function dateSubmit () {
-        console.log("I'm running ");
-    }
-</script>
+
 <div class="container">
     <div class="row justify-content-start">
         @include('layouts.left-menu')
@@ -19,7 +15,7 @@
                     @include('session-messages')
 
                     <h3><i class="bi bi-compass"></i>
-                        Class #{{ request()->query('class_name') }}, 
+                        Class  {{ request()->query('class_name') }}, 
                         @if ($academic_setting->attendance_type == 'course')
                             Course: {{ request()->query('course_name') }}
                         @else
@@ -34,24 +30,36 @@
                                 <div class="mt-4">
                                     <label for="attendance_datetime">Enter Date:</label>
                                     <input type="date" id="attendance_datetime" name="attendance_datetime" value="{{ request()->query('attendance_datetime') }}" >
+                                    <input type="hidden" name="session_id" value="{{ $current_school_session_id }}">
+                                    <input type="hidden" name="class_id" value="{{ request()->query('class_id') }}">
+                                    <input type="hidden" name="course_id" value="{{ request()->query('course_id') }}">
+                                    <input type="hidden" name="section_id" value="{{ request()->query('section_id') }}">
                                     <button type="submit">Submit</button>
                                 </div>
                             </form>
 
-                            <!-- Dropdown menu for selecting classes -->
-                            <div class="mt-4">
-                                <label for="class_id">Select Class:</label>
-                                <select class="form-control" id="class_id" name="class_id">
-                                    <option value="">Select Class</option>
-                                    @foreach ($availableClasses as $classId)
-                                        <option value="{{ $classId }}">{{ $classId }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
+                            
 
                             <!-- Form for taking attendance -->
                             <form action="{{ route('attendances.store') }}" method="POST">
                                 @csrf
+
+                                    <!-- Dropdown menu for selecting classes -->
+                                <div class="mt-4">
+                                    <label for="class_id">Select Class:</label>
+                                    <select class="form-control" id="class" name="class">
+                                        <!-- <option value="">Select Class</option> -->
+                                        @foreach ($availableClasses as $class)
+                                            <option value="{{ $class }}">{{ $class }}</option>
+                                        @endforeach
+                                        
+                                    </select>
+                                </div>
+
+                                 <!-- Hidden input to store the concatenated string -->
+                                 
+                                <input type="hidden" name="attendance_date" value="{{ request()->query('attendance_datetime') }}">
+                                <!-- <input type="hidden" name="class" value="{{ request()->query('class') }}"> -->
                                 <input type="hidden" name="session_id" value="{{ $current_school_session_id }}">
                                 <input type="hidden" name="class_id" value="{{ request()->query('class_id') }}">
                                 @if ($academic_setting->attendance_type == 'course')

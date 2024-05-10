@@ -1,14 +1,14 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container ">
-    <div class="row justify-content-between mt-4">
-        <div class="col align-content-center  px-5 mx-5" >
-            <img src="/imgs/Logo_main-cropped.svg" height="275"  alt="" class="mx-5 px-5 pt-5">
-        </div>
+<div class= "bg-primary" style= "height: 600px; background-image:url(/imgs/slc_background.jpeg);background-repeat: no-repeat;background-size: cover;"> 
+<div class="container pt-5 "  >
+    <h1 class ="text-center fw-bolder" style = "color:#a50318">Welcome to Shyam Lal Cortex</h1>
+    <div class="row justify-content-center " >
+        
         <div class="col-md-6 pt-5">
-            <div class="card mt-5">
-                <div class="card-header bg-white">{{ __('Login') }}</div>
+            <div class="card  w-100">
+                <div class="card-header" style = "background: rgb(2,0,36);background: linear-gradient(180deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%, rgba(0,212,255,1) 100%);"><img src="/imgs/Logo_main.svg" height="100"  alt="" class=""></div>
 
                 <div class="card-body">
                     <form method="POST" action="{{ route('login') }}">
@@ -72,5 +72,6 @@
             </div>
         </div>
     </div>
+</div>
 </div>
 @endsection

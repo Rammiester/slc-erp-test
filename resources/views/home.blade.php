@@ -7,9 +7,10 @@
         <div class="col-xs-11 col-sm-11 col-md-11 col-lg-10 col-xl-10 col-xxl-10">
             <div class="row pt-3">
                 <div class="col ps-4">
-                    <!-- <h1 class="display-6 mb-3"><i class="ms-auto bi bi-grid"></i> {{ __('Dashboard') }}</h1> -->
+                    <h1 class="display-6 mb-3"><i class="ms-auto bi bi-grid"></i> {{ __('Dashboard') }}</h1>
+                    <p class = "text-center mt-5" style = "font-size: 40px ; color :#0d6efd">Hello {{ Auth::user()->first_name }} {{ Auth::user()->last_name }} , <br>Welcome to SLC  {{ Auth::user()->role }} Page</p>
                     <div class="row dashboard">
-                        <div class="col">
+                        <!-- <div class="col">
                             <div class="card rounded-pill">
                                 <div class="card-body">
                                     <div class="d-flex justify-content-between align-items-start">
@@ -44,7 +45,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                         {{-- <div class="col">
                             <div class="card rounded-pill">
                                 <div class="card-body">
@@ -60,40 +61,27 @@
                     </div>
                     @if($studentCount > 0)
                     <div class="mt-3 d-flex align-items-center">
-                        <div class="col-3">
+                        <!-- <div class="col-3">
                             <span class="ps-2 me-2">Students %</span>
                             <span class="badge rounded-pill border" style="background-color: #0678c8;">Male</span>
                             <span class="badge rounded-pill border" style="background-color: #49a4fe;">Female</span>
-                        </div>
-                        @php
+                        </div> -->
+                        <!-- @php
                         $maleStudentPercentage = round(($maleStudentsBySession/$studentCount), 2) * 100;
                         $maleStudentPercentageStyle = "style='background-color: #0678c8; width: $maleStudentPercentage%'";
 
                         $femaleStudentPercentage = round((($studentCount - $maleStudentsBySession)/$studentCount), 2) * 100;
                         $femaleStudentPercentageStyle = "style='background-color: #49a4fe; width: $femaleStudentPercentage%'";
-                        @endphp
-                        <div class="col-9 progress">
+                        @endphp -->
+                        <!-- <div class="col-9 progress">
                             <div class="progress-bar progress-bar-striped" role="progressbar" {!!$maleStudentPercentageStyle!!} aria-valuenow="{{$maleStudentPercentage}}" aria-valuemin="0" aria-valuemax="100">{{$maleStudentPercentage}}%</div>
                             <div class="progress-bar progress-bar-striped" role="progressbar" {!!$femaleStudentPercentageStyle!!} aria-valuenow="{{$femaleStudentPercentage}}" aria-valuemin="0" aria-valuemax="100">{{$femaleStudentPercentage}}%</div>
-                          </div>
+                          </div> -->
                     </div>
                     @endif
-                    <div class="row align-items-md-stretch mt-4">
-                        <div class="col">
-                            <div class="p-3 text-white bg-dark rounded-3">
-                                <h3>Welcome to Unifiedtransform!</h3>
-                                <p><i class="bi bi-emoji-heart-eyes"></i> Thanks for your love and support.</p>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="p-3 bg-white border rounded-3" style="height: 100%;">
-                                <h3>Manage school better</h3>
-                                <p class="text-end">with <i class="bi bi-lightning"></i> <a href="https://github.com/changeweb/Unifiedtransform" target="_blank" style="text-decoration: none;">Unifiedtransform</a> <i class="bi bi-lightning"></i>.</p>
-                            </div>
-                        </div>
-                    </div>
+                    
                     <div class="row mt-4">
-                        <div class="col-lg-6">
+                        <!-- <div class="col-lg-6">
                             <div class="card mb-3">
                                 <div class="card-header bg-transparent"><i class="bi bi-calendar-event me-2"></i> Events</div>
                                 <div class="card-body text-dark">
@@ -112,9 +100,9 @@
                                     </div> --}}
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="card mb-3">
+                        </div> -->
+                        <div class="col-lg-6" style= "width:100%">
+                            <div class="card mb-3" style= "width:100%">
                                 <div class="card-header bg-transparent d-flex justify-content-between"><span><i class="bi bi-megaphone me-2"></i> Notices</span> {{ $notices->links() }}</div>
                                 <div class="card-body p-0 text-dark">
                                     <div>

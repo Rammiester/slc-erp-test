@@ -139,6 +139,8 @@ class AttendanceController extends Controller
             $selectedSession = $request->input('session_id');
             $selectedClass = $request->input('class_id');
             $selectedSection = $request->input('section_id');
+            $school_class = $this->schoolClassRepository->findById($selectedClass);
+            $school_section = $this->sectionRepository->findById($selectedClass);
             // Convert the selected date to the day of the week (1 for Sunday, 2 for Monday, and so on)
             $dayOfWeek = date('N', strtotime($selectedDate));
             
@@ -165,6 +167,7 @@ class AttendanceController extends Controller
                 $endTime = $routine->end;
                 $timeRange = $startTime . ' - ' . $endTime;
                 $availableClasses[] = $timeRange; 
+                
             }
             
             // Fetch academic setting data
@@ -184,6 +187,9 @@ class AttendanceController extends Controller
                 'academic_setting' => $academic_setting,
                 'current_school_session_id' => $current_school_session_id,
                 'student_list' => $student_list,
+                'school_class' => $school_class,
+                'school_section' => $school_section,
+                
             ]);
         }
             

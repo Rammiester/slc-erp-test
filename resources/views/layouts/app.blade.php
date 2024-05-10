@@ -97,13 +97,11 @@
                 </div>
             </div>
         </nav>
-        <main>
+        <main >
             @yield('content')
         </main>
     </div>
 
-    <div id="watermark">
-        <!-- <p>Unifiedtransform</p> -->
-    </div>
+   
 </body>
 </html>

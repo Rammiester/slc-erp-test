@@ -29,7 +29,7 @@
                                 @csrf
                                 <div class="mt-4">
                                     <label for="attendance_datetime">Enter Date:</label>
-                                    <input type="date" id="attendance_datetime" name="attendance_datetime" value="{{ request()->query('attendance_datetime') }}" >
+                                    <input type="date" id="attendance_datetime" name="attendance_datetime" value="{{ request()->query('attendance_datetime') }}"  max="{{ date('Y-m-d') }}">
                                     <input type="hidden" name="session_id" value="{{ $current_school_session_id }}">
                                     <input type="hidden" name="class_id" value="{{ request()->query('class_id') }}">
                                     <input type="hidden" name="course_id" value="{{ request()->query('course_id') }}">

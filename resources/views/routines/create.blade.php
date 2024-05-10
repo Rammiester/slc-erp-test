@@ -45,6 +45,7 @@
                                     <div class="mt-2">
                                         <p>Week Day<sup><i class="bi bi-asterisk text-primary"></i></sup></p>
                                         <select class="form-select" id="course-select" name="weekday" required>
+                                            <option selected disabled>Select Weekday</option>
                                             <option value="1">Monday</option>
                                             <option value="2">Tuesday</option>
                                             <option value="3">Wednesday</option>
@@ -56,11 +57,11 @@
                                     </div>
                                     <div class="mt-2">
                                         <label for="inputStarts" class="form-label">Starts<sup><i class="bi bi-asterisk text-primary"></i></sup></label>
-                                        <input type="text" class="form-control" id="inputStarts" name="start" placeholder="09:00am" required>
+                                        <input type="text" class="form-control" id="inputStarts" name="start"  required>
                                     </div>
                                     <div class="mt-2">
                                         <label for="inputEnds" class="form-label">Ends<sup><i class="bi bi-asterisk text-primary"></i></sup></label>
-                                        <input type="text" class="form-control" id="inputEnds" name="end" placeholder="09:50am" required>
+                                        <input type="text" class="form-control" id="inputEnds" name="end"  required>
                                     </div>
                                     <button type="submit" class="mt-3 btn btn-sm btn-outline-primary"><i class="bi bi-check2"></i> Create</button>
                                 </form>

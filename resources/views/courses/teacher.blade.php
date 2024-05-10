@@ -16,13 +16,15 @@
                             <li class="breadcrumb-item active" aria-current="page">My courses</li>
                         </ol>
                     </nav>
-                    <h6>Filter list by:</h6>
+                    <h6>Filter By:</h6>
                     <div class="mb-4 mt-4">
                         <form action="{{route('course.teacher.list.show')}}" method="GET">
                             <input type="hidden" name="teacher_id" value="{{Auth::user()->id}}">
                             <div class="row">
                                 <div class="col">
+
                                     <select class="form-select" aria-label=".form-select-sm" name="semester_id" required>
+                                        <option value="selectSemester">Select Semester</option>
                                         @isset($semesters)
                                             @foreach ($semesters as $semester)
                                             <option value="{{$semester->id}}" {{($semester->id === request()->query('semester_id'))?'selected':''}}>{{$semester->semester_name}}</option>

@@ -32,6 +32,8 @@
                                     <input type="date" id="attendance_datetime" name="attendance_datetime" value="{{ request()->query('attendance_datetime') }}"  max="{{ date('Y-m-d') }}">
                                     <input type="hidden" name="session_id" value="{{ $current_school_session_id }}">
                                     <input type="hidden" name="class_id" value="{{ request()->query('class_id') }}">
+                                    <input type="hidden" name="class_name" value="{{ request()->query('class_name') }}">
+                                    <input type="hidden" name="section_name" value="{{ request()->query('section_name') }}">
                                     <input type="hidden" name="course_id" value="{{ request()->query('course_id') }}">
                                     <input type="hidden" name="section_id" value="{{ request()->query('section_id') }}">
                                     <button type="submit">Submit</button>
@@ -48,7 +50,7 @@
                                 <div class="mt-4">
                                     <label for="class_id">Select Class:</label>
                                     <select class="form-control" id="class" name="class">
-                                        <!-- <option value="">Select Class</option> -->
+                                        <option value="">Select Class</option>
                                         @foreach ($availableClasses as $class)
                                             <option value="{{ $class }}">{{ $class }}</option>
                                         @endforeach

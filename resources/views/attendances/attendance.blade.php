@@ -14,34 +14,43 @@
                     </h1>
 
                     <h5><i class="bi bi-person"></i> Student Name: {{$student->first_name}} {{$student->last_name}}</h5>
-                    <div class="row mt-3">
+                    <!-- <div class="row mt-3">
                         <div class="col bg-white p-3 border shadow-sm">
                             <div id="attendanceCalendar"></div>
                         </div>
-                    </div>
+                    </div> -->
                     <div class="row mt-4">
                         <div class="col bg-white border shadow-sm p-3">
                             <table class="table table-sm">
                                 <thead>
                                     <tr>
-                                        <th scope="col">Status</th>
-                                        <th scope="col">Date</th>
-                                        <th scope="col">Context</th>
+                                        <th scope="col">Subject Name</th>
+                                        <th scope="col">Number Of Lectures</th>
+                                        <th scope="col">Present</th>
+                                        <th scope="col">Absent</th>
+                                        <th scope="col">Percentage</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($attendances as $attendance)
+                                    @php
+                                        $subjects = $attendances->groupBy(function($attendance) {
+                                            return ($attendance->section == null) ? $attendance->courses->course_name : $attendance->section->section_name;
+                                        });
+                                    @endphp
+
+                                    @foreach ($subjects as $subjectName => $attendanceGroup)
+                                        @php
+                                            $totalLectures = $attendanceGroup->count();
+                                            $presentCount = $attendanceGroup->where('status', 'on')->count();
+                                            $absentCount = $totalLectures - $presentCount;
+                                            $percentage = ($totalLectures > 0) ? round(($presentCount / $totalLectures) * 100, 2) : 0;
+                                        @endphp
                                         <tr>
-                                            <td>
-                                                @if ($attendance->status == "on")
-                                                    <span class="badge bg-success">PRESENT</span>
-                                                @else
-                                                    <span class="badge bg-danger">ABSENT</span>
-                                                @endif
-                                                
-                                            </td>
-                                            <td>{{$attendance->created_at}}</td>
-                                            <td>{{($attendance->section == null)?$attendance->course->course_name:$attendance->section->section_name}}</td>
+                                            <td>{{ $subjectName }}</td>
+                                            <td>{{ $totalLectures }}</td>
+                                            <td>{{ $presentCount }}</td>
+                                            <td>{{ $absentCount }}</td>
+                                            <td>{{ $percentage }}%</td>
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -55,14 +64,14 @@
     </div>
 </div>
 @php
-$events = array();
-if(count($attendances) > 0){
-    foreach ($attendances as $attendance){
-        if($attendance->status == "on"){
-            $events[] = ['title'=> "Present", 'start' => $attendance->created_at, 'color'=>'green'];
-        } else {
-            $events[] = ['title'=> "Absent", 'start' => $attendance->created_at, 'color'=>'red'];
-        }
+$events = [];
+if (count($attendances) > 0) {
+    foreach ($attendances as $attendance) {
+        $events[] = [
+            'title'=> $attendance->status == "on" ? "Present" : "Absent",
+            'start' => $attendance->created_at,
+            'color' => $attendance->status == "on" ? 'green' : 'red'
+        ];
     }
 }
 @endphp

@@ -104,7 +104,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/students/edit/{id}', [UserController::class, 'editStudent'])->name('student.edit.show');
     Route::get('/students/view/list', [UserController::class, 'getStudentList'])->name('student.list.show');
     Route::get('/students/view/profile/{id}', [UserController::class, 'showStudentProfile'])->name('student.profile.show');
-    Route::get('/students/view/attendance/{id}', [AttendanceController::class, 'showStudentAttendance'])->name('student.attendance.show');
+        Route::get('/students/view/attendance/{id}', [AttendanceController::class, 'showStudentAttendance'])->name('student.attendance.show');
 
     // Marks
     Route::get('/marks/create', [MarkController::class, 'create'])->name('course.mark.create');

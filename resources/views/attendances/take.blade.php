@@ -88,7 +88,11 @@
                                                 <th scope="row">{{ $student->id_card_number }}</th>
                                                 <td>{{ $student->student->first_name }} {{ $student->student->last_name }}</td>
                                                 <td>
-                                                    <input class="form-check-input" type="checkbox" name="status[{{ $student->student_id }}]" checked>
+                                                     <!-- Hidden input to capture 'off' state -->
+                                                    <input type="hidden" name="status[{{ $student->student_id }}]" value="off">
+                                                    
+                                                    <!-- Checkbox input to capture 'on' state -->
+                                                    <input class="form-check-input" type="checkbox" name="status[{{ $student->student_id }}]" value="on" checked>
                                                 </td>
                                             </tr>
                                         @endforeach

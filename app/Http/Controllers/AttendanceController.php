@@ -239,10 +239,10 @@ class AttendanceController extends Controller
     public function store(AttendanceStoreRequest $request)
     {
         try {
-
             // Retrieve datetime value from the request
             $attendanceDate = $request->input('attendance_date');
             $class = $request->input('class');
+            
             \Log::info('Fetched Time ' . json_encode($class));
             \Log::info('Fetched Date ' . json_encode($attendanceDate));
 
@@ -259,7 +259,13 @@ class AttendanceController extends Controller
                     $attendance->course_id = $request->input('course_id');
                     $attendance->section_id = $request->input('section_id');
                     $attendance->student_id = $studentId;
-                    $attendance->status = $status;
+
+                    // Check if the checkbox is checked
+                    if ($status === 'on') {
+                        $attendance->status = 'on'; // Set status to "on"
+                    } else {
+                        $attendance->status = 'off'; // Set status to "off" if checkbox is unchecked
+                    }
 
                     // Concatenate attendance_date and class
                     $attendance->attendance_Date_Time = $attendanceDate . ' ' . $class;
@@ -277,6 +283,8 @@ class AttendanceController extends Controller
             return back()->withError($e->getMessage());
         }
     }
+
+
 
     /**
      * Display the specified resource.

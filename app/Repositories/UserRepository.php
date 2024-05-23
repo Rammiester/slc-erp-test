@@ -54,6 +54,7 @@ class UserRepository implements UserInterface {
                     'view routines',
                     'view syllabi',
                     'view events',
+                    'create notices',
                     'view notices',
                 );
             });
@@ -69,7 +70,9 @@ class UserRepository implements UserInterface {
     public function createStudent($request) {
         try {
             DB::transaction(function () use ($request) {
+                // dd($request);
                 $student = User::create([
+                    
                     'first_name'    => $request['first_name'],
                     'last_name'     => $request['last_name'],
                     'email'         => $request['email'],

@@ -21,8 +21,7 @@ class StudentParentInfoRepository {
     }
 
     public function getParentInfo($student_id) {
-        return StudentParentInfo::where('student_id', $student_id)
-                ->first();
+        return StudentParentInfo::where('student_id', $student_id)->first();
     }
 
     public function update($request, $student_id) {

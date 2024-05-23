@@ -84,7 +84,7 @@
                                                         'semester_id' => request()->query('semester_id')
                                                     ])}}" role="button" class="dropdown-item"><i class="bi bi-file-post me-2"></i> Create Assignment</a></li>
                                                       <li><a href="{{route('assignment.list.show', ['course_id' => $course->course->id])}}" role="button" class="dropdown-item"><i class="bi bi-file-post-fill me-2"></i> View Assignments</a></li>
-                                                      <li><a href="{{route('course.mark.create', [
+                                                      <!-- <li><a href="{{route('course.mark.create', [
                                                         'class_id' => $course->schoolClass->id,
                                                         'class_name' => $course->schoolClass->class_name,
                                                         'section_id' => $course->section->id,
@@ -92,8 +92,8 @@
                                                         'course_id' => $course->course->id,
                                                         'course_name' => $course->course->course_name,
                                                         'semester_id' => $selected_semester_id
-                                                    ])}}" role="button" class="dropdown-item"><i class="bi bi-input-cursor me-2"></i> Give Marks</a></li>
-                                                    <li><a href="{{route('course.mark.list.show', [
+                                                    ])}}" role="button" class="dropdown-item"><i class="bi bi-input-cursor me-2"></i> Give Marks</a></li> -->
+                                                    <!-- <li><a href="{{route('course.mark.list.show', [
                                                         'class_id' => $course->schoolClass->id,
                                                         'class_name' => $course->schoolClass->class_name,
                                                         'section_id' => $course->section->id,
@@ -102,7 +102,7 @@
                                                         'course_name' => $course->course->course_name,
                                                         'semester_id' => $selected_semester_id
                                                     ])}}" role="button" class="dropdown-item"><i class="bi bi-cloud-sun me-2"></i> View Final Results</a></li>
-                                                    <li><a href="#" role="button" class="dropdown-item disabled"  tabindex="-1" aria-disabled="true"><i class="bi bi-chat-left-text me-2"></i> Message Students</a></li>
+                                                    <li><a href="#" role="button" class="dropdown-item disabled"  tabindex="-1" aria-disabled="true"><i class="bi bi-chat-left-text me-2"></i> Message Students</a></li> -->
                                                     </ul>
                                                 </div>
                                             </td>

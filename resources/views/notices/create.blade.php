@@ -18,7 +18,16 @@
                     <div class="row">
                         <form action="{{route('notice.store')}}" method="POST">
                             @csrf
+                            
                             <input type="hidden" name="session_id" value="{{$current_school_session_id}}">
+                            <div class="mb-3">
+                                <label for="audience" class="form-label">Audience</label>
+                                <select name="audience" id="audience" class="form-select">
+                                    <option value="teachers">Teachers</option>
+                                    <option value="all">All</option>
+                                </select>
+                            </div>
+
                             @include('components.ckeditor.editor', ['name' => 'notice'])
                             <button type="submit" class="btn btn-outline-primary"><i class="bi bi-check2"></i> Save</button>
                         </form>

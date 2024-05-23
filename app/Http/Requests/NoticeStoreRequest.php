@@ -13,7 +13,9 @@ class NoticeStoreRequest extends FormRequest
      */
     public function authorize()
     {
-        return auth()->user()->can('create notices');
+        // Check if the user has the 'create notices' permission
+        // or if they have the role of 'teacher'
+        return $this->user()->can('create notices') || $this->user()->hasRole('teacher');
     }
 
     /**
@@ -26,6 +28,7 @@ class NoticeStoreRequest extends FormRequest
         return [
             'notice'    => 'required',
             'session_id'=> 'required',
+            'audience'=> 'required',
         ];
     }
 }

@@ -10,6 +10,7 @@ class NoticeRepository {
             Notice::create([
                 'notice'        => $request['notice'],
                 'session_id'    => $request['session_id'],
+                'audience' => $request['audience'],
             ]);
         } catch (\Exception $e) {
             throw new \Exception('Failed to save Notice. '.$e->getMessage());
@@ -20,5 +21,11 @@ class NoticeRepository {
         return Notice::where('session_id', $session_id)
                     ->orderBy('id', 'desc')
                     ->simplePaginate(3);
+    }
+    public function getAllByAudience(array $audiences, $sessionId)
+    {
+        return Notice::whereIn('audience', $audiences)
+                     ->where('session_id', $sessionId)
+                     ->paginate(10); // Adjust pagination as needed
     }
 }

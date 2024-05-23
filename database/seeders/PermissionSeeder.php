@@ -17,7 +17,7 @@ class PermissionSeeder extends Seeder
     {
         // Reset cached roles and permissions
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
-
+        
         // create permissions
         Permission::create(['name' => 'create users']);
         Permission::create(['name' => 'view users']);
@@ -100,9 +100,9 @@ class PermissionSeeder extends Seeder
         // Permission::create(['name' => 'delete sections']);
 
         $user = \App\Models\User::factory()->create([
-            'email' => 'admin@ut.com',
-            'first_name' => 'Hasib',
-            'last_name' => 'Mahmud'
+            'email' => 'admin@slc.com',
+            'first_name' => 'Admin',
+            'last_name' => 'SLC'
         ]);
         $user->givePermissionTo(
             'create school sessions',

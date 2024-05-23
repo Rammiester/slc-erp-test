@@ -17,7 +17,7 @@
                         </ol>
                     </nav>
 
-                    @include('session-messages')
+                    @include('session-messages') 
 
                     <p class="text-primary">
                         <small><i class="bi bi-exclamation-diamond-fill me-2"></i> Remember to create related "Class" and "Section" before adding student</small>
@@ -80,7 +80,7 @@
                                     <input type="text" class="form-control" id="inputNationality" name="nationality" placeholder="e.g. Bangladeshi, German, ..." required value="{{old('nationality')}}">
                                 </div>
                                 <div class="col-md-4">
-                                    <label for="inputBloodType" class="form-label">BloodType<sup><i class="bi bi-asterisk text-primary"></i></sup></label>
+                                    <label for="inputBloodType" class="form-label">Admission Criteria<sup><i class="bi bi-asterisk text-primary"></i></sup></label>
                                     <select id="inputBloodType" class="form-select" name="blood_type" required>
                                         <option {{old('blood_type') == 'A+' ? 'selected' : ''}}>A+</option>
                                         <option {{old('blood_type') == 'A-' ? 'selected' : ''}}>A-</option>
@@ -154,10 +154,15 @@
                                     <select class="form-select" id="inputAssignToSection" name="section_id" required>
                                     </select>
                                 </div>
+                                <!-- <div class="col-md-12">
+                                    <label for="semester" class="form-label">Assign to Semester </label>
+                                    <input type="number" class="form-control" id="inputSemester" name="semester" placeholder="semester" value="{{old('semester')}}">
+                                </div> -->
                                 <div class="col-md-12">
                                     <label for="inputBoardRegistrationNumber" class="form-label">Board registration No.</label>
                                     <input type="text" class="form-control" id="inputBoardRegistrationNumber" name="board_reg_no" placeholder="Registration No." value="{{old('board_reg_no')}}">
                                 </div>
+                                
                                 <input type="hidden" name="session_id" value="{{$current_school_session_id}}">
                             </div>
                             <div class="row mt-4">

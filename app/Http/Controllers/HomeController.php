@@ -9,7 +9,7 @@ use App\Repositories\NoticeRepository;
 use App\Interfaces\SchoolClassInterface;
 use App\Interfaces\SchoolSessionInterface;
 use App\Repositories\PromotionRepository;
-
+use Illuminate\Support\Facades\Auth;
 class HomeController extends Controller
 {
     use SchoolSession;
@@ -49,8 +49,14 @@ class HomeController extends Controller
 
         $teacherCount = $this->userRepository->getAllTeachers()->count();
 
+        // Fetch notices based on the user's role
+        $user = Auth::user();
         $noticeRepository = new NoticeRepository();
-        $notices = $noticeRepository->getAll($current_school_session_id);
+        if ($user->role == 'teacher') {
+            $notices = $noticeRepository->getAllByAudience(['teachers', 'all'], $current_school_session_id);
+        } else {
+            $notices = $noticeRepository->getAllByAudience(['all'], $current_school_session_id);
+        }
 
         $data = [
             'classCount'    => $classCount,

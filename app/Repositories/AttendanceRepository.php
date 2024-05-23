@@ -42,7 +42,8 @@ class AttendanceRepository implements AttendanceInterface {
                             ->where('class_id', $class_id)
                             ->where('section_id', $section_id)
                             ->where('session_id', $session_id)
-                            ->whereDate('created_at', '=', Carbon::today())
+                            ->groupBy('student_id')
+                            // ->whereDate('created_at', '=', Carbon::today())
                             ->get();
         } catch (\Exception $e) {
             throw new \Exception('Failed to get attendances. '.$e->getMessage());
@@ -55,6 +56,7 @@ class AttendanceRepository implements AttendanceInterface {
                             ->where('class_id', $class_id)
                             ->where('course_id', $course_id)
                             ->where('session_id', $session_id)
+                            // ->groupBy('student_id')
                             ->whereDate('created_at', '=', Carbon::today())
                             ->get();
         } catch (\Exception $e) {
@@ -67,6 +69,7 @@ class AttendanceRepository implements AttendanceInterface {
             return Attendance::with(['section','course'])
                             ->where('student_id', $student_id)
                             ->where('session_id', $session_id)
+                            ->groupBy('course_id')
                             ->get();
         } catch (\Exception $e) {
             throw new \Exception('Failed to get attendances. '.$e->getMessage());

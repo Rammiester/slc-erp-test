@@ -22,33 +22,48 @@
                     @elseif(request()->query('section_name'))
                         <h3><i class="bi bi-diagram-2"></i> Section: {{request()->query('section_name')}} </h3>
                     @endif
-                    <div class="mt-4">Current Date and Time:  {{ date('Y-m-d H:i:s') }}</div>
+                    <!-- <div class="mt-4">Current Date and Time:  {{ date('Y-m-d H:i:s') }}</div> -->
                     <div class="row mt-4">
                         <div class="col bg-white border shadow-sm pt-2">
                             <table class="table">
                                 <thead>
                                     <tr>
                                         <th scope="col">Student Name</th>
-                                        <th scope="col">Today's Status</th>
+                                        <th scope="col">Total Lectures</th>
                                         <th scope="col">Total Attended</th>
+                                        <th scope="col">Total Absent</th>
+                                        <th scope="col">Percentage</th>
+
+
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach ($attendances as $attendance)
                                         @php
-                                            $total_attended = \App\Models\Attendance::where('student_id', $attendance->student_id)->where('session_id', $attendance->session_id)->count();
+                                            $total_attended = \App\Models\Attendance::where('student_id', $attendance->student_id)->where('session_id', $attendance->session_id)->where('course_id' , $attendance->course_id)->count();
+                                            $present_count = \App\Models\Attendance::where('student_id', $attendance->student_id)->where('session_id', $attendance->session_id)->where('course_id' , $attendance->course_id)->where('status', 'on')->count();
+                                            $absent_count = $total_attended - $present_count;
+                                            $percentage = ($total_attended > 0) ? round(($present_count / $total_attended) * 100, 2) : 0;
                                         @endphp
                                         <tr>
                                             <td>{{$attendance->student->first_name}} {{$attendance->student->last_name}}</td>
+                                            <td>{{$total_attended}}</td>
                                             <td>
-                                                @if ($attendance->status == "on")
-                                                    <span class="badge bg-success">PRESENT</span>
+                                                <!-- @if ($attendance->status == "on")
+                                                    <span class="badge bg-success">present_count</span>
                                                 @else
                                                     <span class="badge bg-danger">ABSENT</span>
-                                                @endif
+                                                @endif -->
+                                                <span class="badge bg-success">{{$present_count}}</span>
                                                 
                                             </td>
-                                            <td>{{$total_attended}}</td>
+                                            <td>
+                                                <span class="badge bg-danger">{{$absent_count}}</span>
+                                            </td>
+                                            <td>
+                                                {{$percentage}}%
+                                            </td>
+                                            
                                         </tr>
                                     @endforeach
                                 </tbody>

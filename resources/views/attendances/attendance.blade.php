@@ -32,25 +32,32 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @php
-                                        $subjects = $attendances->groupBy(function($attendance) {
-                                            return ($attendance->section == null) ? $attendance->courses->course_name : $attendance->section->section_name;
-                                        });
-                                    @endphp
-
-                                    @foreach ($subjects as $subjectName => $attendanceGroup)
+                                @foreach ($attendances as $attendance)
                                         @php
-                                            $totalLectures = $attendanceGroup->count();
-                                            $presentCount = $attendanceGroup->where('status', 'on')->count();
-                                            $absentCount = $totalLectures - $presentCount;
-                                            $percentage = ($totalLectures > 0) ? round(($presentCount / $totalLectures) * 100, 2) : 0;
+                                            $total_attended = \App\Models\Attendance::where('student_id', $attendance->student_id)->where('session_id', $attendance->session_id)->where('course_id' , $attendance->course_id)->count();
+                                            $present_count = \App\Models\Attendance::where('student_id', $attendance->student_id)->where('session_id', $attendance->session_id)->where('course_id' , $attendance->course_id)->where('status', 'on')->count();
+                                            $absent_count = $total_attended - $present_count;
+                                            $percentage = ($total_attended > 0) ? round(($present_count / $total_attended) * 100, 2) : 0;
                                         @endphp
                                         <tr>
-                                            <td>{{ $subjectName }}</td>
-                                            <td>{{ $totalLectures }}</td>
-                                            <td>{{ $presentCount }}</td>
-                                            <td>{{ $absentCount }}</td>
-                                            <td>{{ $percentage }}%</td>
+                                            <td>{{$attendance->course->course_name}} </td>
+                                            <td>{{$total_attended}}</td>
+                                            <td>
+                                                <!-- @if ($attendance->status == "on")
+                                                    <span class="badge bg-success">present_count</span>
+                                                @else
+                                                    <span class="badge bg-danger">ABSENT</span>
+                                                @endif -->
+                                                <span class="badge bg-success">{{$present_count}}</span>
+                                                
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-danger">{{$absent_count}}</span>
+                                            </td>
+                                            <td>
+                                                {{$percentage}}%
+                                            </td>
+                                            
                                         </tr>
                                     @endforeach
                                 </tbody>

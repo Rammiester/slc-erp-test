@@ -68,7 +68,7 @@
                                     <input type="hidden" name="course_id" value="{{ request()->query('course_id') }}">
                                     <input type="hidden" name="section_id" value="0">
                                 @else
-                                    <input type="hidden" name="course_id" value="0">
+                                    <input type="hidden" name="course_id" value="{{ request()->query('course_id') }}">
                                     <input type="hidden" name="section_id" value="{{ request()->query('section_id') }}">
                                 @endif
                                 @foreach ($student_list as $student)

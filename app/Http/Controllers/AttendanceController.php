@@ -245,7 +245,7 @@ class AttendanceController extends Controller
             
             \Log::info('Fetched Time ' . json_encode($class));
             \Log::info('Fetched Date ' . json_encode($attendanceDate));
-
+            // dd($request->input('course_id'));
             // Ensure the attendance_Date_Time value is not null
             if ($attendanceDate && $class) {
                 // Iterate over each student's attendance status
@@ -310,9 +310,14 @@ class AttendanceController extends Controller
             $academic_setting = $this->academicSettingRepository->getAcademicSetting();
             if ($academic_setting->attendance_type == 'section') {
                 $attendances = $attendanceRepository->getSectionAttendance($class_id, $section_id, $current_school_session_id);
+                // dd($attendances);
             } else {
                 $attendances = $attendanceRepository->getCourseAttendance($class_id, $course_id, $current_school_session_id);
+                // dd($attendances);
             }
+            // dd($attendances);
+
+
             $data = ['attendances' => $attendances];
 
             return view('attendances.view', $data);
@@ -326,7 +331,7 @@ class AttendanceController extends Controller
         if (auth()->user()->role == "student" && auth()->user()->id != $id) {
             return abort(404);
         }
-
+        // dd($id);
         $current_school_session_id = $this->getSchoolCurrentSession();
         $attendanceRepository = new AttendanceRepository();
         $attendances = $attendanceRepository->getStudentAttendance($current_school_session_id, $id);

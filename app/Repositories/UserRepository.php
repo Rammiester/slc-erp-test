@@ -85,10 +85,9 @@ class UserRepository implements UserInterface {
                     'zip'           => $request['zip'],
                     'photo'         => (!empty($request['photo']))?$this->convert($request['photo']):null,
                     'birthday'      => $request['birthday'],
-                    'religion'      => $request['religion'],
-                    'blood_type'    => $request['blood_type'],
                     'role'          => 'student',
                     'password'      => Hash::make($request['password']),
+                    'state_of_domicile' => $request['state_of_domicile'],
                 ]);
 
                 // Store Parents' information

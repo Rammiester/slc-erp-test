@@ -80,37 +80,20 @@
                                     <input type="text" class="form-control" id="inputNationality" name="nationality" placeholder="e.g. Bangladeshi, German, ..." required value="{{old('nationality')}}">
                                 </div>
                                 <div class="col-md-4">
-                                    <label for="inputBloodType" class="form-label">Admission Criteria<sup><i class="bi bi-asterisk text-primary"></i></sup></label>
-                                    <select id="inputBloodType" class="form-select" name="blood_type" required>
-                                        <option {{old('blood_type') == 'A+' ? 'selected' : ''}}>A+</option>
-                                        <option {{old('blood_type') == 'A-' ? 'selected' : ''}}>A-</option>
-                                        <option {{old('blood_type') == 'B+' ? 'selected' : ''}}>B+</option>
-                                        <option {{old('blood_type') == 'B-' ? 'selected' : ''}}>B-</option>
-                                        <option {{old('blood_type') == 'O+' ? 'selected' : ''}}>O+</option>
-                                        <option {{old('blood_type') == 'O-' ? 'selected' : ''}}>O-</option>
-                                        <option {{old('blood_type') == 'AB+' ? 'selected' : ''}}>AB+</option>
-                                        <option {{old('blood_type') == 'AB-' ? 'selected' : ''}}>AB-</option>
-                                        <option {{old('blood_type') == 'other' ? 'selected' : ''}}>Other</option>
-                                    </select>
+                                    <label for="inputAdmissionCriteria" class="form-label">Admission Criteria<sup><i class="bi bi-asterisk text-primary"></i></sup></label>
+                                    <input type="text" class="form-control" id="inputAdmissionCriteria" name="admission_criteria" placeholder="e.g. UR" required value="{{old('admission_criteria')}}">
                                 </div>
                                 <div class="col-md-4">
-                                    <label for="inputReligion" class="form-label">Religion<sup><i class="bi bi-asterisk text-primary"></i></sup></label>
-                                    <select id="inputReligion" class="form-select" name="religion" required>
-                                        <option {{old('religion') == 'Islam' ? 'selected' : ''}}>Islam</option>
-                                        <option {{old('religion') == 'Hinduism' ? 'selected' : ''}}>Hinduism</option>
-                                        <option {{old('religion') == 'Christianity' ? 'selected' : ''}}>Christianity</option>
-                                        <option {{old('religion') == 'Buddhism' ? 'selected' : ''}}>Buddhism</option>
-                                        <option {{old('religion') == 'Judaism' ? 'selected' : ''}}>Judaism</option>
-                                        <option {{old('religion') == 'Others' ? 'selected' : ''}}>Other</option>
-                                    </select>
+                                    <label for="inputRollNo" class="form-label">Roll No<sup><i class="bi bi-asterisk text-primary"></i></sup></label>
+                                    <input type="text" class="form-control" id="inputRollNo" name="board_reg_no" placeholder="12254" required value="{{old('board_reg_no')}}">>    
                                 </div>
                                 <div class="col-md-4">
                                     <label for="inputPhone" class="form-label">Phone<sup><i class="bi bi-asterisk text-primary"></i></sup></label>
                                     <input type="text" class="form-control" id="inputPhone" name="phone" placeholder="+880 01......" required value="{{old('phone')}}">
                                 </div>
                                 <div class="col-5-md">
-                                    <label for="inputIdCardNumber" class="form-label">Id Card Number<sup><i class="bi bi-asterisk text-primary"></i></sup></label>
-                                    <input type="text" class="form-control" id="inputIdCardNumber" name="id_card_number" placeholder="e.g. 2021-03-01-02-01 (Year Semester Class Section Roll)" required value="{{old('id_card_number')}}">
+                                    <label for="inputExamRollNo" class="form-label">Exam Roll No.<sup><i class="bi bi-asterisk text-primary"></i></sup></label>
+                                    <input type="text" class="form-control" id="inputExamRollNo" name="exam_roll_no" required value="{{old('exam_roll_no')}}">
                                 </div>
                             </div>
                             <div class="row mt-4 g-3">
@@ -154,16 +137,69 @@
                                     <select class="form-select" id="inputAssignToSection" name="section_id" required>
                                     </select>
                                 </div>
-                                <!-- <div class="col-md-12">
-                                    <label for="semester" class="form-label">Assign to Semester </label>
-                                    <input type="number" class="form-control" id="inputSemester" name="semester" placeholder="semester" value="{{old('semester')}}">
-                                </div> -->
+                                <div class="col-md-6">
+                                    <label for="inputAssignToSemester" class="form-label">Assign to Semester:<sup><i class="bi bi-asterisk text-primary"></i></sup></label>
+                                    <select class="form-select" id="inputAssignToSemester" name="semester" required>
+                                        @isset($semesters)
+                                            <option selected disabled>Please select a Semester</option>
+                                            @foreach ($semesters as $semester)
+                                                <option value="{{$semester->id}}" >{{$semester->semester_name}}</option>
+                                            @endforeach
+                                        @endisset
+                                    </select>
+                                </div>
                                 <div class="col-md-12">
-                                    <label for="inputBoardRegistrationNumber" class="form-label">Board registration No.</label>
-                                    <input type="text" class="form-control" id="inputBoardRegistrationNumber" name="board_reg_no" placeholder="Registration No." value="{{old('board_reg_no')}}">
+                                    <label for="inputFormNo" class="form-label">Form No</label>
+                                    <input type="text" class="form-control" id="inputFormNo" name="id_card_number" placeholder="Form No." value="{{old('id_card_number')}}">
+                                </div>
+                                <div class="row mt-2">
+                                    <div class="col-md-3">
+                                        <label for="inputStateOfDomicile" class="form-label">State of Domicile<sup><i class="bi bi-asterisk text-primary"></i></sup></label>
+                                        <input type="text" class="form-control" id="inputStateOfDomicile" name="state_of_domicile" placeholder="State of Domicile" required value="{{ old('state_of_domicile') }}">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="inputApplyToMinorityCollegesas" class="form-label">Apply to Minority Colleges as<sup><i class="bi bi-asterisk text-primary"></i></sup></label>
+                                        <input type="text" class="form-control" id="inputApplyToMinorityCollegesas" name="apply_to_minority_colleges"  required value="{{ old('apply_to_minority_colleges') }}">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="inputKashmiriMigrant" class="form-label">Kashmiri Migrant Category<sup><i class="bi bi-asterisk text-primary"></i></sup></label>
+                                        <input type="text" class="form-control" id="inputKashmiriMigrant" name="kashmiri_migrant"  required value="{{ old('kashmiri_migrant') }}">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="inputBoardOfEducation" class="form-label">Board of Education<sup><i class="bi bi-asterisk text-primary"></i></sup></label>
+                                        <input type="text" class="form-control" id="inputBoardOfEducation" name="board_of_education" placeholder="CBSE" required value="{{ old('board_of_education') }}">
+                                    </div>
+                                    
+                                    
+                                </div>
+                                <div class="row mt-2">
+                                    <div class="col-md-3">
+                                        <label for="inputPersonsWithDisabilities" class="form-label">Persons with Disabilities (PwD) Category<sup><i class="bi bi-asterisk text-primary"></i></sup></label>
+                                        <input type="text" class="form-control" id="inputPersonsWithDisabilities" name="persons_with_disabilities"  required value="{{ old('persons_with_disabilities') }}">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="inputAnnualFamilyIncome" class="form-label">Annual Family Income only for OBC (2018-19)<sup><i class="bi bi-asterisk text-primary"></i></sup></label>
+                                        <input type="text" class="form-control" id="inputAnnualFamilyIncome" name="annual_family_income"  required value="{{ old('annual_family_income') }}">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="inputSikkimeseStudents" class="form-label">Sikkimese Students nominated by the Govt. of Sikkim<sup><i class="bi bi-asterisk text-primary"></i></sup></label>
+                                        <input type="text" class="form-control" id="inputSikkimeseStudents" name="sikkimese_students"  required value="{{ old('sikkimese_students') }}">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="inputAadharCardNumber" class="form-label">Applicant's Aadhar Card Number<sup><i class="bi bi-asterisk text-primary"></i></sup></label>
+                                        <input type="text" class="form-control" id="inputAadharCardNumber" name="aadhar_card_number" placeholder="1111 1111 1111" required value="{{ old('aadhar_card_number') }}">
+                                    </div>
+                                </div>
+                                <div class="row mt-2">
+                                    <div class="col-4-md">
+                                        <label for="inputJ&KStudents" class="form-label">Prime Minister's Special Scholarship Scheme for J&K Students<sup><i class="bi bi-asterisk text-primary"></i></sup></label>
+                                        <input type="text" class="form-control" id="inputJ&KStudents" name="j&k_students"  required value="{{ old('j&k_students') }}">
+                                    </div>
                                 </div>
                                 
+
                                 <input type="hidden" name="session_id" value="{{$current_school_session_id}}">
+                                <input type="hidden" name="id_card_number" value = "100">
                             </div>
                             <div class="row mt-4">
                                 <div class="col-12-md">

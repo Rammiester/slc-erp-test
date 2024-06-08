@@ -13,6 +13,7 @@ use App\Http\Requests\StudentStoreRequest;
 use App\Http\Requests\TeacherStoreRequest;
 use App\Interfaces\SchoolSessionInterface;
 use App\Repositories\StudentParentInfoRepository;
+use App\Repositories\SemesterRepository;
 
 class UserController extends Controller
 {
@@ -103,12 +104,13 @@ class UserController extends Controller
         $current_school_session_id = $this->getSchoolCurrentSession();
 
         $school_classes = $this->schoolClassRepository->getAllBySession($current_school_session_id);
-
+        $semesterRepo = new SemesterRepository();
+        $semesters = $semesterRepo->getAll($current_school_session_id);
         $data = [
             'current_school_session_id' => $current_school_session_id,
             'school_classes'            => $school_classes,
+            'semesters' => $semesters,
         ];
-
         return view('students.add', $data);
     }
 
@@ -121,6 +123,7 @@ class UserController extends Controller
     public function storeStudent(StudentStoreRequest $request)
     {
         try {
+            // dd($request);
             $this->userRepository->createStudent($request->validated());
 
             return back()->with('status', 'Student creation was successful!');
@@ -164,6 +167,7 @@ class UserController extends Controller
 
         return view('teachers.edit', $data);
     }
+    
     public function updateTeacher(Request $request) {
         try {
             $this->userRepository->updateTeacher($request->toArray());

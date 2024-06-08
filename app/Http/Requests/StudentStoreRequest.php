@@ -35,11 +35,12 @@ class StudentStoreRequest extends FormRequest
             'city'              => 'required|string',
             'zip'               => 'required|string',
             'photo'             => 'nullable|string',
-            'birthday'          => 'required|date',
-            'religion'          => 'required|string',
-            'blood_type'        => 'required|string',
+            'birthday'          => 'required|date',  
+            'id_card_number'    => 'required|string',
+            'board_reg_no'          => 'required|string',  //new //done
+            'admission_criteria'        => 'required|string', //new //done
             'password'          => 'required|string|min:8',
-
+            // 'id_card_number'    => 'required',
             // Parents' information
             'father_name'       => 'required|string',
             'father_phone'      => 'required|string',
@@ -50,9 +51,21 @@ class StudentStoreRequest extends FormRequest
             // Academic information
             'class_id'          => 'required',
             'section_id'        => 'required',
-            'board_reg_no'      => 'string',
+            'id_card_number'      => 'required|string',     //new //done
             'session_id'        => 'required',
-            'id_card_number'    => 'required',
+            
+            'exam_roll_no'    => 'required|string', //new //done
+            'state_of_domicile' => 'required|string', //new //done 
+            'apply_to_minority_colleges'    => 'required|string', //new //done
+            'kashmiri_migrant'  => 'required|string', //new //done
+            'board_of_education'    => 'required|string', //new //done
+            'persons_with_disabilities' => 'required|string', //new //done
+            'annual_family_income' => 'required|string', //new //done
+            'sikkimese_students' => 'required|string', //new //done
+            'aadhar_card_number' => 'required|string', //new //done
+            'j&k_students' => 'required|string', //new  //done
+            'semester' => 'required|string', //new //done
+
         ];
     }
 }

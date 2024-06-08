@@ -13,7 +13,7 @@ class PromotionRepository {
                 'session_id'    => $request['session_id'],
                 'class_id'      => $request['class_id'],
                 'section_id'    => $request['section_id'],
-                'id_card_number'=> $request['id_card_number'],
+                'board_reg_no'=> $request['board_reg_no'],
             ]);
         } catch (\Exception $e) {
             throw new \Exception('Failed to add Student. '.$e->getMessage());

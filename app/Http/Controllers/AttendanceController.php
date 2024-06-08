@@ -345,4 +345,55 @@ class AttendanceController extends Controller
         return view('attendances.attendance', $data);
     }
 
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(Request $request)
+    {
+        // Retrieve existing attendance data for the selected date, class, etc.
+        $existingAttendance = Attendance::where([
+            'attendance_date' => $request->attendance_date,
+            'class_id' => $request->class_id,
+            // Add conditions for course ID or section ID if applicable
+        ])->get();
+
+        // Return the view with existing attendance data
+        return view('attendances.edit', ['existingAttendance' => $existingAttendance]);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request)
+    {
+        try {
+            // Iterate over each student's attendance status
+            foreach ($request->input('status') as $studentId => $status) {
+                // Find the corresponding attendance record
+                $attendance = Attendance::where([
+                    'attendance_date' => $request->attendance_date,
+                    'class_id' => $request->class_id,
+                    'student_id' => $studentId,
+                    // Add conditions for course ID or section ID if applicable
+                ])->first();
+
+                // Update the attendance status
+                $attendance->status = $status === 'on' ? 'on' : 'off';
+
+                // Save the updated attendance data
+                $attendance->save();
+            }
+
+            return back()->with('status', 'Attendance updated successfully!');
+        } catch (\Exception $e) {
+            return back()->withError($e->getMessage());
+        }
+    }
+
 }

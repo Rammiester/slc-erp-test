@@ -14,6 +14,7 @@ class PromotionRepository {
                 'class_id'      => $request['class_id'],
                 'section_id'    => $request['section_id'],
                 'board_reg_no'=> $request['board_reg_no'],
+                'semester_id' => $request['semester_id'],
             ]);
         } catch (\Exception $e) {
             throw new \Exception('Failed to add Student. '.$e->getMessage());
@@ -72,6 +73,13 @@ class PromotionRepository {
     public function getAllStudentsBySession($session_id) {
         return Promotion::with(['student', 'section'])
                 ->where('session_id', $session_id)
+                ->get();
+    }
+
+    public function getStudentsBySemesterId($session_id, $semester_id) {
+        return Promotion::with(['student', 'section'])
+                ->where('session_id', $session_id)
+                ->where('semester_id', $semester_id)
                 ->get();
     }
 

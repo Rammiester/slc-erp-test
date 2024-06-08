@@ -195,6 +195,15 @@ class UserRepository implements UserInterface {
         }
     }
 
+    public function getAllStudentsBySemesterId($session_id, $semester_id) {
+        try {
+            $promotionRepository = new PromotionRepository();
+            return $promotionRepository->getStudentsBySemesterId($session_id, $semester_id);
+        } catch (\Exception $e) {
+            throw new \Exception('Failed to get all Students. '.$e->getMessage());
+        }
+    }
+
     public function getAllStudentsBySession($session_id) {
         $promotionRepository = new PromotionRepository();
         return $promotionRepository->getAllStudentsBySession($session_id);

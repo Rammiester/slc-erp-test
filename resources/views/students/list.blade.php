@@ -49,6 +49,22 @@
                             <button id="sortByFirstNameBtn" class="btn btn-primary"><i class="bi bi-sort-alpha-down"></i> Sort by First Name</button>
                         </div>
 
+                        <form class="row" action="{{route('student.list.show')}}" method="GET">
+                            <div class="col">
+                                <select class="form-select" aria-label="Class" name="semester_id" required>
+                                    @isset($semesters)
+                                        <option selected disabled>Please select a semesters</option>
+                                        @foreach ($semesters as $semester)
+                                            <option value="{{$semester->id}}">{{$semester->semester_name}}</option>
+                                        @endforeach
+                                    @endisset
+                                </select>
+                            </div>
+                            <div class="col">
+                                <button type="submit" class="btn btn-primary"><i class="bi bi-arrow-counterclockwise"></i> Load List</button>
+                            </div>
+                        </form>
+
                         <div class="bg-white border shadow-sm p-3 mt-4">
                             <table class="table table-responsive">
                                 <thead>

@@ -58,15 +58,26 @@ class UserController extends Controller
         $class_id = $request->query('class_id', 0);
         $section_id = $request->query('section_id', 0);
 
+        $semester_id = $request->query('semester_id',0);
+
+        $semesterRepo = new SemesterRepository();
+        $semesters = $semesterRepo->getAll($current_school_session_id);
+
         try{
 
             $school_classes = $this->schoolClassRepository->getAllBySession($current_school_session_id);
 
-            $studentList = $this->userRepository->getAllStudents($current_school_session_id, $class_id, $section_id);
+            if($current_school_session_id && $class_id && $section_id) {
+                $studentList = $this->userRepository->getAllStudents($current_school_session_id, $class_id, $section_id);
+
+            } else {
+                $studentList = $this->userRepository->getAllStudentsBySemesterId($current_school_session_id, $semester_id);
+            }
 
             $data = [
                 'studentList'       => $studentList,
                 'school_classes'    => $school_classes,
+                'semesters'         => $semesters,
             ];
 
             return view('students.list', $data);
